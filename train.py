@@ -4,7 +4,7 @@ from timer import Timer
 
 if __name__ == '__main__':
     caffe.set_mode_gpu()
-    caffe.set_device(1)
+    caffe.set_device(0)
 
     solver = caffe.SGDSolver('solver.prototxt')
     # solver.net.copy_from()

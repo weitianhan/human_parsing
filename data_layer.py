@@ -18,15 +18,13 @@ class HumanParsingDataLayer(caffe.Layer):
         top[0].reshape(self.batch_size, 3, 144, 96)
         if self.phase == 'TRAIN':
             top[1].reshape(self.batch_size, 1, 144, 96)
-            top[2].reshape(self.batch_size, 18)
 
     def forward(self, bottom, top):
         if self.phase == 'TRAIN':
             for iters in range(self.batch_size):
-                image, seg, vector = self.load_next_batch()
+                image, seg = self.load_next_batch()
                 top[0].data[iters, ...] = image
                 top[1].data[iters, ...] = seg
-                top[2].data[iters, ...] = vector
 
 
     def reshape(self, bottom, top):
@@ -49,11 +47,11 @@ class HumanParsingDataLayer(caffe.Layer):
         mat = sio.loadmat('./annotation/%s' % self.gts[self.cur])
         image = mat['image']
         seg = mat['seg']
-        vector = mat['vector']
-        # print vector
-        # print vector.shape
-        # stop
         channel_swap = (2, 0, 1)
         image = image.transpose(channel_swap)
         self.cur += 1
-        return image, seg, vector
+        return image, seg
+
+    def load_test_batch(self):
+        mat = sio.loadmat('./test/%s' % self.gts[self.cur])
+        image = mat['image']

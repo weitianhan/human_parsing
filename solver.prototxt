@@ -7,6 +7,6 @@ max_iter: 675000
 momentum: 0.9
 weight_decay: 0.0005
 snapshot: 112500
-snapshot_prefix: "/home/vip2/tianhan/parse/snapshot/"
-train_net: "/home/vip2/tianhan/parse/train.prototxt"
+snapshot_prefix: "/home/vip2/tianhan/parse1/snapshot/"
+train_net: "/home/vip2/tianhan/parse1/train.prototxt"
 solver_mode: GPU
