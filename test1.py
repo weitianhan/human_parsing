@@ -28,7 +28,8 @@ if __name__ == '__main__':
 
     for imgname in testimgs:
         cnt += 1
-        ori_img = cv2.imread('./human_resize/%s' % imgname)
+        ori_img = cv2.imread('./human_resize/%s' % imgname) # bgr order?
+        ori_img = ori_img[:,:,::-1]
         # mat = sio.loadmat('./test/4565_2655.mat')
         # ori_img = mat['image']
         img = ori_img.transpose(2,0,1)
