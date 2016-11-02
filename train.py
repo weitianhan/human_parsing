@@ -9,7 +9,7 @@ if __name__ == '__main__':
     solver = caffe.SGDSolver('solver.prototxt')
     # solver.net.copy_from()
     timer = Timer()
-    for iters in range(675000):
+    for iters in range(225000):
         timer.tic()
         solver.step(1);
         timer.toc()

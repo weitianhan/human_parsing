@@ -13,7 +13,7 @@ if __name__ == '__main__':
     caffe.set_device(0)
     timer = Timer()
     prototxt = './test.prototxt'
-    model = './snapshot/_iter_675000.caffemodel'
+    model = './snapshot/_iter_225000.caffemodel'
     net = caffe.Net(prototxt, model, caffe.TEST)
     testimgs = os.listdir('./test')
     cnt = 0
@@ -25,12 +25,14 @@ if __name__ == '__main__':
         template = pickle.load(f)
     color = np.array(template)
     result = np.zeros((144,96,3))
+    gt_result = np.zeros((144,96,3))
 
     for imgname in testimgs:
         cnt += 1
         mat = sio.loadmat('./test/%s' % imgname)
         # mat = sio.loadmat('./test/4565_2655.mat')
         ori_img = mat['image']
+        gt = mat['seg']
         img = ori_img.transpose(2,0,1)
         img = img.reshape(1, 3, 144, 96)
         blob = {
@@ -48,17 +50,21 @@ if __name__ == '__main__':
         for x in range(144):
             for y in range(96):
                 c = class_map[x,y]
-                if conf_map[c,x,y] < 0.1:
-                    c = 0
+                g = gt[x,y]
+                # if conf_map[c,x,y] < 0.1:
+                #     c = 0
                 result[x,y,:] = color[c,:]
+                gt_result[x,y,:] = color[g,:]
 
-        plt.subplot(121)
+        plt.subplot(131)
         plt.imshow(ori_img); plt.axis('off'); plt.title('Original Img')
 
-        plt.subplot(122)
+        plt.subplot(132)
         plt.imshow(result); plt.axis('off'); plt.title('result')
         # plt.show()
         # stop
+        plt.subplot(133)
+        plt.imshow(gt_result); plt.axis('off'); plt.title('GT')
         plt.savefig('./output/%s.jpg' % imgname.replace('.jpg', ''), format='jpg')
         plt.cla()
         plt.clf()
